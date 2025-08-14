@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ver Usuarios</title>
+</head>
+<body>
+    <h1>Usuarios en localStorage</h1>
+    <pre id="usersData"></pre>
+    <script>
+        const users = JSON.parse(localStorage.getItem('usuarios') || '[]');
+        document.getElementById('usersData').textContent = JSON.stringify(users, null, 2);
+        console.log('Usuarios en localStorage:', users);
+    </script>
+</body>
+</html>
