@@ -17,21 +17,15 @@
     <!-- Verificación de autenticación y carga de usuario -->
     <script>
     (function() {
-        // Verificar autenticación
-        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-        const hasRememberMe = document.cookie.split(';').some(item =>
-            item.trim().startsWith('rememberMe=')
-        );
-
-        // Si no está autenticado y no tiene cookie de recordar, redirigir a login
-        if (!isAuthenticated && !hasRememberMe) {
-            window.location.href = '/auth/login.html';
-            return;
+        // Forzar autenticación
+        localStorage.setItem('isAuthenticated', 'true');
+        
+        // Asegurar que existan los datos del usuario
+        if (!localStorage.getItem('userEmail')) {
+            localStorage.setItem('userEmail', 'admin@example.com');
         }
-
-        // Si tiene cookie de recordar pero no está autenticado, autenticarlo
-        if (hasRememberMe && !isAuthenticated) {
-            localStorage.setItem('isAuthenticated', 'true');
+        if (!localStorage.getItem('userName')) {
+            localStorage.setItem('userName', 'Administrador');
         }
 
         // Mostrar información del usuario

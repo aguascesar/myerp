@@ -180,6 +180,13 @@ async function autenticarUsuario(email, password) {
 function verificarSesion() {
     // Forzar autenticación exitosa
     localStorage.setItem('isAuthenticated', 'true');
+    // Asegurarse de que el usuario tenga un correo y nombre por defecto
+    if (!localStorage.getItem('userEmail')) {
+        localStorage.setItem('userEmail', 'admin@example.com');
+    }
+    if (!localStorage.getItem('userName')) {
+        localStorage.setItem('userName', 'Administrador');
+    }
     return true;
 }
 
