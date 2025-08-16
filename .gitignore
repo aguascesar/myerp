@@ -1,0 +1,8 @@
+# Archivos de entorno
+.env
+.env.local
+.env.development
+.env.production
+
+# Archivos de configuración con datos sensibles
+backend/config/database.js
