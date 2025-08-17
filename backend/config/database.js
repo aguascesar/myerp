@@ -4,16 +4,14 @@ require('dotenv').config();
 
 
 
-console.log('🔍 Iniciando configuración de la base de datos...');
+console.log('🔍 Iniciando db con variables de entorno...');
 console.log('🏢 Host:', process.env.MYSQLHOST);
 console.log('👤 Usuario:', process.env.MYSQLUSER);
 console.log('🔑 Base de datos:', process.env.MYSQLDATABASE);
 console.log('🚪 Puerto:', process.env.MYSQLPORT || 3306);
-console.log('🔌 Configurando conexión a la base de datos...');
-console.log('📊 Base de datos:', process.env.MYSQLDATABASE);
-console.log('🏠 Host:', process.env.MYSQLHOST);
 
 // Validación de variables de entorno
+console.log('🔎 Validando variables de entorno...');
 const requiredEnvVars = ['MYSQLHOST', 'MYSQLUSER', 'MYSQLPASSWORD', 'MYSQLDATABASE'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
@@ -22,7 +20,7 @@ if (missingVars.length > 0) {
   process.exit(1);
 }
 
-
+console.log('✅ Variables de entorno validadas... Creando pool de conexiones...');
 
 const pool = mysql.createPool({
     host: process.env.MYSQLHOST,
@@ -90,31 +88,31 @@ async function testConnection() {
 }
 
 // Ejecutar la prueba de conexión
+console.log('🔍 Probando conexión a la base de datos...');
 testConnection().catch(console.error);
 
 // Manejo de eventos del pool
 pool.on('acquire', (connection) => {
-  console.log('🔌 Conexión adquirida del pool, ID:', connection.threadId);
+  console.log('🔌 pool.on-acquire: Conexión adquirida del pool, ID:', connection.threadId);
 });
 
 pool.on('release', (connection) => {
-  console.log('🔄 Conexión liberada al pool, ID:', connection.threadId);
+  console.log('🔄 pool.on-release: Conexión liberada al pool, ID:', connection.threadId);
 });
 
 pool.on('enqueue', () => {
-  console.log('⏳ Esperando conexión disponible...');
+  console.log('⏳ pool.on-enqueue: Esperando conexión disponible...');
 });
 
 
 // Manejo de errores
 pool.on('error', (err) => {
-  console.error('Error en el pool de MySQL:', {
+  console.error('pool.on-error: Error en el pool de conexiones:', {
     code: err.code,
     errno: err.errno,
     message: err.message,
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
-
-
+console.log('✅ Pool de conexiones configurado... Exportando pool...');
 module.exports = pool;
